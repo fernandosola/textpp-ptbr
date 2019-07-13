@@ -38,12 +38,8 @@ class TextPreProcessing:
         return palavras
 
     @staticmethod
-    def stopwords():
-        palavras = TextPreProcessing.get_dicionary('stopwords.dic')
-        complemento = [
-
-        ]
-        return palavras + complemento
+    def get_stopwords():
+        return TextPreProcessing.get_dicionary('stopwords.dic')
 
     @staticmethod
     def remove_hour(text):
@@ -144,7 +140,7 @@ class TextPreProcessing:
     @staticmethod
     def remove_stopwords(texto):
         if not TextPreProcessing.__re_stopwords:
-            stopwords = TextPreProcessing.stopwords()
+            stopwords = TextPreProcessing.get_stopwords()
             TextPreProcessing.__re_stopwords = re.compile(r'(^|\b)(' + r'|'.join(stopwords) + r')($|\b)')
         return TextPreProcessing.__re_stopwords.sub(' ', texto)
 

@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/home/fernando/.virtualenvs/geral/bin/python",
+    "python.pythonPath": "C:\\Anaconda3\\envs\\python36geral\\python.exe",
     "python.testing.unittestArgs": [
         "-v",
         "-s",

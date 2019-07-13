@@ -21,7 +21,7 @@ class TestTextPreProcessing(TestCase):
         assert len(d) > 0, 'Should be greater than 0'
 
     def test_stopwords(self):
-        sw = ttp.stopwords()
+        sw = ttp.get_stopwords()
         for w in ['de', 'do', 'das']:
             assert w in sw, 'Should "{}" be in dict'.format(w)
 
