@@ -6,23 +6,25 @@
 Common Text Pre-Processing for Portuguese
 =========================================
 
+Teste
+
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    010_modules
+    search
+    but
+    
+   :maxdepth: 5
+   :caption: Table of Contents
 
 
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 
 
 
-preprocessing
-=============
+.. Indices and tables
+.. ==================
 
-.. automodule:: textpp_ptbr.preprocessing
-   :members:
+.. * :ref:`genindex`
+.. * :ref:`modindex`
+.. * :ref:`search`
+
