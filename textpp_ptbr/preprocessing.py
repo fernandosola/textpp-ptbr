@@ -13,7 +13,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 class TextPreProcessing:
     """Collection of static methods used to perform common text cleanup tasks focused on portuguese language.
 
-    This class use dictionaries and regular expressions to expose a set of features for Portuguese texts.
+    This class use dictionaries and regular expressions to expose a set of features to help 
+    process Portuguese texts.
     """
 
     __re_hour_pattern = re.compile(r'(^|\b)(\d)+(\s)*(h|hr|hrs|hs)($|\b)', re.IGNORECASE)
@@ -30,7 +31,7 @@ class TextPreProcessing:
     __re_urls = re.compile(r'[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?')
 
     @staticmethod
-    def get_dicionary(dict_name):
+    def __get_dicionary(dict_name):
         path = os.path.join(BASE_DIR, 'dictionaries', dict_name)
         palavras = []
         with open(path, 'r', encoding='utf-8') as arq_dic:
@@ -39,54 +40,60 @@ class TextPreProcessing:
 
     @staticmethod
     def get_stopwords():
-        return TextPreProcessing.get_dicionary('stopwords.dic')
+        """Returns a list of brazilian portuguese stopwords.
+
+        All stopwords were copied from NLTK. 
+        """
+
+
+        return TextPreProcessing.__get_dicionary('stopwords.dic')
 
     @staticmethod
     def remove_hour(text):
         """Remove hour patterns from texts.
 
-        Usage Example:
-
+        Usage:
             'some text with 12h or another 13hs time explicit'
 
         Returns:
-
-        ``
             'some text with   or another   time explicit'
-        ``
-
-        :param text: str
-
-        :return str: text without hour patterns
 
         """
         return TextPreProcessing.__re_hour_pattern.sub(' ', text)
 
     @staticmethod
-    def remove_person_names(texto):
+    def remove_person_names(text):
+        """Remove common person names.
+
+        This feature uses a dictionary with brazilian common names.
+        """
         if not TextPreProcessing.__re_common_person_names:
-            palavras = TextPreProcessing.get_dicionary('common_person_names.dic')
+            palavras = TextPreProcessing.__get_dicionary('common_person_names.dic')
             TextPreProcessing.__re_common_person_names = re.compile(r'(^|\b)(' + r'|'.join(palavras) + r')($|\b)')
-        return TextPreProcessing.__re_common_person_names.sub(' ', texto)
+        return TextPreProcessing.__re_common_person_names.sub(' ', text)
 
     @staticmethod
-    def remove_pronouns(texto):
+    def remove_pronouns(text):
+        """Remove pronouns.
+
+        Feature based on a dictionary with commmon portuguese pronouns extracted from wikitionary.
+        """
         if not TextPreProcessing.__re_pronouns:
-            palavras = TextPreProcessing.get_dicionary('pronouns.dic')
+            palavras = TextPreProcessing.__get_dicionary('pronouns.dic')
             TextPreProcessing.__re_pronouns = re.compile(r'(^|\b)(' + r'|'.join(palavras) + r')($|\b)')
-        return TextPreProcessing.__re_pronouns.sub(' ', texto)
+        return TextPreProcessing.__re_pronouns.sub(' ', text)
 
     @staticmethod
-    def remove_reduced_or_contracted_words(texto):
+    def remove_reduced_or_contracted_words(text):
         if not TextPreProcessing.__re_reduced_or_contracted_words:
-            palavras = TextPreProcessing.get_dicionary('contracoes.dic')
+            palavras = TextPreProcessing.__get_dicionary('contracted_words.dic')
             TextPreProcessing.__re_reduced_or_contracted_words = re.compile(r'(^|\b)(' + r'|'.join(palavras) + r')($|\b)')
-        return TextPreProcessing.__re_reduced_or_contracted_words.sub(' ', texto)
+        return TextPreProcessing.__re_reduced_or_contracted_words.sub(' ', text)
 
     @staticmethod
     def remove_adverbs(texto):
         if not TextPreProcessing.__re_adverbs:
-            palavras = TextPreProcessing.get_dicionary('adverbs.dic')
+            palavras = TextPreProcessing.__get_dicionary('adverbs.dic')
             TextPreProcessing.__re_adverbs = re.compile(r'(^|\b)(' + r'|'.join(palavras) + r')($|\b)')
         return TextPreProcessing.__re_adverbs.sub(' ', texto)
 
@@ -127,7 +134,7 @@ class TextPreProcessing:
     @staticmethod
     def remove_numbers_in_full(text):
         if not TextPreProcessing.__re_numbers_in_full:
-            palavras = TextPreProcessing.get_dicionary('numbers_in_full.dic')
+            palavras = TextPreProcessing.__get_dicionary('numbers_in_full.dic')
             TextPreProcessing.__re_numbers_in_full = re.compile(r'(^|\b)(' + r'|'.join(palavras) + r')($|\b)')
         return TextPreProcessing.__re_numbers_in_full.sub(' ', text)
 

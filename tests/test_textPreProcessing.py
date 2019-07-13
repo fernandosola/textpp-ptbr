@@ -7,17 +7,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 class TestTextPreProcessing(TestCase):
     def test_get_dicionary(self):
-        d = ttp.get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'adverbs.dic'))
+        d = ttp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'adverbs.dic'))
         assert len(d) > 0, 'Should be greater than 0'
-        d = ttp.get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'common_person_names.dic'))
+        d = ttp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'common_person_names.dic'))
         assert len(d) > 0, 'Should be greater than 0'
-        d = ttp.get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'contracoes.dic'))
+        d = ttp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'contracoes.dic'))
         assert len(d) > 0, 'Should be greater than 0'
-        d = ttp.get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'numbers_in_full.dic'))
+        d = ttp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'numbers_in_full.dic'))
         assert len(d) > 0, 'Should be greater than 0'
-        d = ttp.get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'pronouns.dic'))
+        d = ttp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'pronouns.dic'))
         assert len(d) > 0, 'Should be greater than 0'
-        d = ttp.get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'stopwords.dic'))
+        d = ttp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'stopwords.dic'))
         assert len(d) > 0, 'Should be greater than 0'
 
     def test_stopwords(self):
