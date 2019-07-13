@@ -6,15 +6,25 @@
 Common Text Pre-Processing for Portuguese
 =========================================
 
-Teste
+O objetivo desta biblioteca é fornececer um conjunto de funções geralmente
+utilizadas em limpeza de textos e tarefas similares. O foco da biblioteca é 
+Português do Brasil.
 
-.. toctree::
-    010_modules
-    search
-    but
-    
-   :maxdepth: 5
-   :caption: Table of Contents
+Common Usage 
+------------
+
+.. code-block::
+   :linenos:
+   
+   from textpp_ptbr.preprocessing import TextPreProcessing
+   
+
+Using 
+*****
+
+.. .. toctree::    
+..    :maxdepth: 2
+..    :caption: Table of Contents
 
 
 
