@@ -6,6 +6,8 @@
 Common Text Pre-Processing for Portuguese
 =========================================
 
+Teste
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:

@@ -1,0 +1,14 @@
+{
+    "python.pythonPath": "/home/fernando/.virtualenvs/geral/bin/python",
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./tests",
+        "-p",
+        "test_*.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.unittestEnabled": true,
+    "restructuredtext.confPath": "${workspaceFolder}/docs"
+}

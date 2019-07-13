@@ -1,2 +1,4 @@
+coverage
 sphinxs
 sphinx_rtd_theme
+sphinx-markdown-builder
