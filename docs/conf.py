@@ -22,11 +22,13 @@ project = 'textpp-ptbr'
 copyright = '2019, Fernando Sola Pereira'
 author = 'Fernando Sola Pereira'
 
+
 # The full version, including alpha/beta/rc tags
 release = '0.0.1'
 
 
 # -- General configuration ---------------------------------------------------
+master_doc = 'index'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
