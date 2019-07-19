@@ -6,19 +6,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class TestTextPreProcessing(TestCase):
-    def test_get_dicionary(self):
-        d = tpp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'adverbs.dic'))
-        assert len(d) > 0, 'Should be greater than 0'
-        d = tpp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'common_person_names.dic'))
-        assert len(d) > 0, 'Should be greater than 0'
-        d = tpp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'contracoes.dic'))
-        assert len(d) > 0, 'Should be greater than 0'
-        d = tpp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'numbers_in_full.dic'))
-        assert len(d) > 0, 'Should be greater than 0'
-        d = tpp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'pronouns.dic'))
-        assert len(d) > 0, 'Should be greater than 0'
-        d = tpp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'stopwords.dic'))
-        assert len(d) > 0, 'Should be greater than 0'
 
     def test_stopwords(self):
         sw = tpp.get_stopwords()
@@ -34,13 +21,16 @@ class TestTextPreProcessing(TestCase):
         assert tpp.remove_person_names(text) == 'Afirma o reu que seu funcionario     dirigia o veiculo na ocasiao.'
 
     def test_remove_pronouns(self):
-        self.fail()
+        text = 'Afirma o réu que seu funcionário Mário Tadeu dirigia o veículo na ocasião.'
+        assert tpp.remove_pronouns(text) == 'Afirma   réu     funcionário Mário Tadeu dirigia   veículo na ocasião.'
 
     def test_remove_reduced_or_contracted_words(self):
-        self.fail()
+        text = "Ninguém sabe ao certo donde partiram os gritos."
+        assert tpp.remove_reduced_or_contracted_words(text) == "Ninguém sabe   certo   partiram os gritos."
 
     def test_remove_adverbs(self):
-        self.fail()
+        text = "Chegaram tarde para o Jantar. Era a moça mais bonita da festa. Partiram ontem apressadamente."
+        assert tpp.remove_adverbs(text) == "Chegaram   para o Jantar. Era a moça   bonita da festa. Partiram    ."
 
     def test_remove_special_characters(self):
         self.fail()

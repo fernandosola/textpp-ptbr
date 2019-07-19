@@ -30,26 +30,22 @@ class TextPreProcessing:
     __re_pure_numbers = re.compile(r'(^|\b)(\d+)(\b|$)')
     __re_urls = re.compile(r'[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?')
 
-    @staticmethod
-    def __get_dicionary(dict_name):
+    @classmethod
+    def __get_dicionary(cls, dict_name):
         path = os.path.join(BASE_DIR, 'dictionaries', dict_name)
-        palavras = []
-        with open(path, 'r', encoding='utf-8') as arq_dic:
-            palavras = [p.replace('\n', '') for p in arq_dic]
-        return palavras
+        with open(path, 'r', encoding='utf-8') as dictionary:
+            return [p.replace('\n', '') for p in dictionary]
 
-    @staticmethod
-    def get_stopwords():
+    @classmethod
+    def get_stopwords(cls):
         """Returns a list of brazilian portuguese stopwords.
 
-        All stopwords were copied from NLTK. 
+        All stopwords were extracted from NLTK. 
         """
+        return cls.__get_dicionary('stopwords.dic')
 
-
-        return TextPreProcessing.__get_dicionary('stopwords.dic')
-
-    @staticmethod
-    def remove_hour(text):
+    @classmethod
+    def remove_hour(cls, text):
         """Remove hour patterns from texts.
 
         .. code-block::
@@ -59,13 +55,15 @@ class TextPreProcessing:
             Out[ ]: 'some text with   or another   time explicit'            
 
         """
-        return TextPreProcessing.__re_hour_pattern.sub(' ', text)
+        return cls.__re_hour_pattern.sub(' ', text)
 
-    @staticmethod
-    def remove_person_names(text):
+    @classmethod
+    def remove_person_names(cls, text):
         """Remove common person names.
+
         All accents are removed before identify names.
-        This feature uses a dictionary with brazilian common names to build a regular expression that match common names.
+        This method uses a dictionary with brazilian common names to build a regular 
+        expression that match common names.
 
         .. code-block::
 
@@ -75,116 +73,120 @@ class TextPreProcessing:
 
 
         """
-        text = TextPreProcessing.remove_accents(text)
-        if not TextPreProcessing.__re_common_person_names:
-            def tratar(t):
-                return TextPreProcessing.remove_accents(t)
-            palavras = TextPreProcessing.__get_dicionary('common_person_names.dic')
-            palavras = [tratar(p) for p in palavras]
-            TextPreProcessing.__re_common_person_names = re.compile(r'(^|\b)(' + r'|'.join(palavras) + r')($|\b)')
-        return TextPreProcessing.__re_common_person_names.sub(' ', text)
+        text = cls.remove_accents(text)
+        if not cls.__re_common_person_names:
+            dictionary = cls.__get_dicionary('common_person_names.dic')
+            dictionary = [cls.remove_accents(p) for p in dictionary]
+            cls.__re_common_person_names = re.compile(r'(^|\b)(' + r'|'.join(dictionary) + r')($|\b)')
+        return cls.__re_common_person_names.sub(' ', text)
 
-    @staticmethod
-    def remove_pronouns(text):
+    @classmethod
+    def remove_pronouns(cls, text):
         """Remove pronouns.
 
-        Feature based on a dictionary with commmon portuguese pronouns extracted from wikitionary.
+        Method based on a dictionary.
+
+        .. code-block::
+
+            In [ ]: from textpp_ptbr.preprocessing import TextPreProcessing as tpp
+               ...: tpp.remove_pronouns('Ninguém sabe ao certo donde partiram os gritos.')
+            Out[ ]: 'Ninguém sabe   certo   partiram os gritos.'            
+
+
         """
-        if not TextPreProcessing.__re_pronouns:
-            palavras = TextPreProcessing.__get_dicionary('pronouns.dic')
-            TextPreProcessing.__re_pronouns = re.compile(r'(^|\b)(' + r'|'.join(palavras) + r')($|\b)')
-        return TextPreProcessing.__re_pronouns.sub(' ', text)
+        if not cls.__re_pronouns:
+            palavras = cls.__get_dicionary('pronouns.dic')
+            cls.__re_pronouns = re.compile(r'(^|\b)(' + r'|'.join(palavras) + r')($|\b)', re.IGNORECASE)
+        return cls.__re_pronouns.sub(' ', text)
 
-    @staticmethod
-    def remove_reduced_or_contracted_words(text):
-        if not TextPreProcessing.__re_reduced_or_contracted_words:
+    @classmethod
+    def remove_reduced_or_contracted_words(cls, text):
+        """Remove reduced or crontracted words.
+
+        Method based on a dictionary.
+
+        .. code-block::
+
+            In [ ]: from textpp_ptbr.preprocessing import TextPreProcessing as tpp
+               ...: tpp.remove_pronouns('Ninguém sabe ao certo donde partiram os gritos.')
+            Out[ ]: 'Ninguém sabe   certo   partiram os gritos.'            
+
+        """
+
+        if not cls.__re_reduced_or_contracted_words:
             palavras = TextPreProcessing.__get_dicionary('contracted_words.dic')
-            TextPreProcessing.__re_reduced_or_contracted_words = re.compile(r'(^|\b)(' + r'|'.join(palavras) + r')($|\b)')
-        return TextPreProcessing.__re_reduced_or_contracted_words.sub(' ', text)
+            cls.__re_reduced_or_contracted_words = re.compile(r'(^|\b)(' + r'|'.join(palavras) + r')($|\b)')
+        return cls.__re_reduced_or_contracted_words.sub(' ', text)
+
+    @classmethod
+    def remove_adverbs(cls, text):
+        """Remove reduced or crontracted words.
+
+        Method based on a dictionary.
+
+        .. code-block::
+
+            In [ ]: from textpp_ptbr.preprocessing import TextPreProcessing as tpp
+               ...: tpp.remove_pronouns('Chegaram tarde para o Jantar. Era a moça mais bonita da festa. Partiram ontem apressadamente.')
+            Out[ ]: 'Chegaram   para o Jantar. Era a moça   bonita da festa. Partiram    .'            
+        
+        """
+
+        if not cls.__re_adverbs:
+            palavras = cls.__get_dicionary('adverbs.dic')
+            cls.__re_adverbs = re.compile(r'(^|\b)(' + r'|'.join(palavras) + r')($|\b)')
+        return cls.__re_adverbs.sub(' ', text)
 
     @staticmethod
-    def remove_adverbs(texto):
-        if not TextPreProcessing.__re_adverbs:
-            palavras = TextPreProcessing.__get_dicionary('adverbs.dic')
-            TextPreProcessing.__re_adverbs = re.compile(r'(^|\b)(' + r'|'.join(palavras) + r')($|\b)')
-        return TextPreProcessing.__re_adverbs.sub(' ', texto)
-
-    @staticmethod
-    def remove_special_characters(texto):
+    def remove_special_characters(text):
         lista = '-#?º°ª.:/;~^`[{]}\\|!$%"\'&*()=+,><\t\r\n…'
-        resultado = texto
+        result = text
         for i in range(0, len(lista)):
-            resultado = resultado.replace(lista[i], ' ')
-        return resultado
+            result = result.replace(lista[i], ' ')
+        return result
 
-    @staticmethod
-    def remove_excessive_spaces(texto):
+    @classmethod
+    def remove_excessive_spaces(cls, texto):
         if texto is None or len(texto.strip()) == 0:
             # return texto
             return re.sub(' +', ' ', texto)
-        return TextPreProcessing.__re_remove_excessive_spaces.sub(' ', texto)
+        return cls.__re_remove_excessive_spaces.sub(' ', texto)
 
     @staticmethod
     def remove_accents(text):
         if text is None or len(text.strip()) == 0:
             return text
-        resultado = text
-        resultado = unicodedata.normalize('NFKD', resultado).encode(
-            'ASCII', 'ignore').decode('ASCII')
-        return resultado
-
-    @staticmethod
-    def remove_symbols_from_numbers(text):
-        resultado = text
-        resultado = TextPreProcessing.__re_numbers_with_symbols.sub(r'\1\3', resultado)
-        return resultado
-
-    @staticmethod
-    def remove_numbers(text):
-        return TextPreProcessing.__re_pure_numbers.sub(r' ', text)
-
-    @staticmethod
-    def remove_numbers_in_full(text):
-        if not TextPreProcessing.__re_numbers_in_full:
-            palavras = TextPreProcessing.__get_dicionary('numbers_in_full.dic')
-            TextPreProcessing.__re_numbers_in_full = re.compile(r'(^|\b)(' + r'|'.join(palavras) + r')($|\b)')
-        return TextPreProcessing.__re_numbers_in_full.sub(' ', text)
-
-    @staticmethod
-    def remove_urls(text):
-        resultado = text
-        resultado = TextPreProcessing.__re_urls.sub(r' ', resultado)
-        return resultado
-
-    @staticmethod
-    def remove_stopwords(texto):
-        if not TextPreProcessing.__re_stopwords:
-            stopwords = TextPreProcessing.get_stopwords()
-            TextPreProcessing.__re_stopwords = re.compile(r'(^|\b)(' + r'|'.join(stopwords) + r')($|\b)')
-        return TextPreProcessing.__re_stopwords.sub(' ', texto)
-
-    @staticmethod
-    def tratar_texto(text, remover_caracteres_especiais=True):
-        if not text or len(text) == 0:
-            return ''
-
         result = text
-        result = TextPreProcessing.remove_person_names(result)
-        result = TextPreProcessing.remove_reduced_or_contracted_words(result)
-        result = TextPreProcessing.remove_pronouns(result)
-        result = TextPreProcessing.remove_adverbs(result)
-        result = TextPreProcessing.remove_numbers_in_full(result)
-        result = TextPreProcessing.remove_symbols_from_numbers(result)
-        result = TextPreProcessing.remove_urls(result)
-        result = result.lower()
-        result = TextPreProcessing.remove_stopwords(result)
-
-        if remover_caracteres_especiais:
-            result = TextPreProcessing.remove_special_characters(result)
-
-        result = TextPreProcessing.remove_accents(result)
-        result = TextPreProcessing.remove_numbers(result)
-        result = TextPreProcessing.remove_excessive_spaces(result)
-        result = result.strip()
-
+        result = unicodedata.normalize('NFKD', result).encode(
+            'ASCII', 'ignore').decode('ASCII')
         return result
+
+    @classmethod
+    def remove_symbols_from_numbers(cls, text):
+        resultado = text
+        resultado = cls.__re_numbers_with_symbols.sub(r'\1\3', resultado)
+        return resultado
+
+    @classmethod
+    def remove_numbers(cls, text):
+        return cls.__re_pure_numbers.sub(r' ', text)
+
+    @classmethod
+    def remove_numbers_in_full(cls, text):
+        if not TextPreProcessing.__re_numbers_in_full:
+            palavras = cls.__get_dicionary('numbers_in_full.dic')
+            cls.__re_numbers_in_full = re.compile(r'(^|\b)(' + r'|'.join(palavras) + r')($|\b)')
+        return cls.__re_numbers_in_full.sub(' ', text)
+
+    @classmethod
+    def remove_urls(cls, text):
+        resultado = text
+        resultado = cls.__re_urls.sub(r' ', resultado)
+        return resultado
+
+    @classmethod
+    def remove_stopwords(cls, texto):
+        if not cls.__re_stopwords:
+            stopwords = cls.get_stopwords()
+            cls.__re_stopwords = re.compile(r'(^|\b)(' + r'|'.join(stopwords) + r')($|\b)')
+        return cls.__re_stopwords.sub(' ', texto)
