@@ -52,11 +52,11 @@ class TextPreProcessing:
     def remove_hour(text):
         """Remove hour patterns from texts.
 
-        Usage:
-            'some text with 12h or another 13hs time explicit'
+        .. code-block::
 
-        Returns:
-            'some text with   or another   time explicit'
+            In [ ]: from textpp_ptbr.preprocessing import TextPreProcessing as tpp
+               ...: tpp.remove_hour('some text with 12h or another 13hs time explicit')
+            Out[ ]: 'some text with   or another   time explicit'            
 
         """
         return TextPreProcessing.__re_hour_pattern.sub(' ', text)

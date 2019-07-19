@@ -16,7 +16,7 @@ Common Usage
 
 .. code-block::
    :linenos:
-   
+
    from textpp_ptbr.preprocessing import TextPreProcessing as tpp
 
     text = '''\
@@ -47,23 +47,11 @@ Common Usage
     # que ninguem fala em verso.
     #
     # Fernando Pessoa
-   
+
 
 Main features
 -------------
 
 .. autoclass:: textpp_ptbr.preprocessing.TextPreProcessing
    :members:
-
-.. toctree::    
-   :maxdepth: 2
-   :caption: Table of Contents
-
-
-.. Indices and tables
-.. ==================
-
-.. * :ref:`genindex`
-.. * :ref:`modindex`
-.. * :ref:`search`
 
