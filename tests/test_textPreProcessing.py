@@ -1,36 +1,37 @@
 from unittest import TestCase
 import os
-from textpp_ptbr.preprocessing import TextPreProcessing as ttp
+from textpp_ptbr.preprocessing import TextPreProcessing as tpp
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class TestTextPreProcessing(TestCase):
     def test_get_dicionary(self):
-        d = ttp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'adverbs.dic'))
+        d = tpp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'adverbs.dic'))
         assert len(d) > 0, 'Should be greater than 0'
-        d = ttp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'common_person_names.dic'))
+        d = tpp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'common_person_names.dic'))
         assert len(d) > 0, 'Should be greater than 0'
-        d = ttp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'contracoes.dic'))
+        d = tpp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'contracoes.dic'))
         assert len(d) > 0, 'Should be greater than 0'
-        d = ttp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'numbers_in_full.dic'))
+        d = tpp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'numbers_in_full.dic'))
         assert len(d) > 0, 'Should be greater than 0'
-        d = ttp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'pronouns.dic'))
+        d = tpp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'pronouns.dic'))
         assert len(d) > 0, 'Should be greater than 0'
-        d = ttp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'stopwords.dic'))
+        d = tpp.__get_dicionary(os.path.join(BASE_DIR, 'textpp_ptbr', 'dictionaries', 'stopwords.dic'))
         assert len(d) > 0, 'Should be greater than 0'
 
     def test_stopwords(self):
-        sw = ttp.get_stopwords()
+        sw = tpp.get_stopwords()
         for w in ['de', 'do', 'das']:
             assert w in sw, 'Should "{}" be in dict'.format(w)
 
     def test_remove_hour(self):
         text = 'texto de teste 11h outro 15hs teste 16 h novamente 17hrs algum'
-        assert ttp.remove_hour(text) == 'texto de teste   outro   teste   novamente   algum'
+        assert tpp.remove_hour(text) == 'texto de teste   outro   teste   novamente   algum'
 
     def test_remove_person_names(self):
-        self.fail()
+        text = 'Afirma o réu que seu funcionário Mário Tadeu dirigia o veículo na ocasião.'
+        assert tpp.remove_person_names(text) == 'Afirma o reu que seu funcionario     dirigia o veiculo na ocasiao.'
 
     def test_remove_pronouns(self):
         self.fail()

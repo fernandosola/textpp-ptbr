@@ -15,9 +15,8 @@ Common Usage
 ------------
 
 .. code-block::
-   :linenos:
 
-   from textpp_ptbr.preprocessing import TextPreProcessing as tpp
+    from textpp_ptbr.preprocessing import TextPreProcessing as tpp
 
     text = '''\
     Escrever é esquecer. A literatura é a maneira mais agradável de ignorar a vida.
@@ -34,7 +33,7 @@ Common Usage
 
     tpp.remove_accents(text)
     print(tpp.remove_accents(text))
-    
+
     # Output: 
     # Escrever e esquecer. A literatura e a maneira mais agradavel de ignorar a vida.
     # A musica embala, as artes visuais animam, as artes vivas (como a danca e a arte

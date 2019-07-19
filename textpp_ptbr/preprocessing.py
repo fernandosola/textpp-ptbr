@@ -64,11 +64,23 @@ class TextPreProcessing:
     @staticmethod
     def remove_person_names(text):
         """Remove common person names.
+        All accents are removed before identify names.
+        This feature uses a dictionary with brazilian common names to build a regular expression that match common names.
 
-        This feature uses a dictionary with brazilian common names.
+        .. code-block::
+
+            In [ ]: from textpp_ptbr.preprocessing import TextPreProcessing as tpp
+               ...: tpp.remove_person_names('Afirma o réu que seu funcionário Mário Tadeu dirigia o veículo na ocasião.')
+            Out[ ]: 'Afirma o reu que seu funcionario     dirigia o veiculo na ocasiao.'            
+
+
         """
+        text = TextPreProcessing.remove_accents(text)
         if not TextPreProcessing.__re_common_person_names:
+            def tratar(t):
+                return TextPreProcessing.remove_accents(t)
             palavras = TextPreProcessing.__get_dicionary('common_person_names.dic')
+            palavras = [tratar(p) for p in palavras]
             TextPreProcessing.__re_common_person_names = re.compile(r'(^|\b)(' + r'|'.join(palavras) + r')($|\b)')
         return TextPreProcessing.__re_common_person_names.sub(' ', text)
 
